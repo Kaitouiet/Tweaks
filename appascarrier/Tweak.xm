@@ -21,11 +21,12 @@ static NSString *ogCarrier;
 static SBTelephonyManager *sbtm;
 
 static void setCarrierText(NSString *text) {
+        static BOOL once = NO;
 	sbtm = [objc_getClass("SBTelephonyManager") sharedTelephonyManager];
-	static dispatch_once_t once;
-	dispatch_once(&once, ^ {
+	if (!once) { //run code once easier way to understand :P
 		// Save original carrier so we can revert later
 		ogCarrier = [sbtm operatorName];
+		once = YES;
 	});
 	[sbtm _reallySetOperatorName:text];
 }
